@@ -1,0 +1,14 @@
+:mod:`neutrino-winds.tests.test_examples`
+=========================================
+
+.. py:module:: neutrino-winds.tests.test_examples
+
+
+Module Contents
+---------------
+
+.. function:: test_one_plus_one_is_two()
+
+   Check that one and one are indeed two.
+
+

@@ -1,0 +1,113 @@
+:mod:`neutrino-winds.DE_Solver`
+===============================
+
+.. py:module:: neutrino-winds.DE_Solver
+
+
+Module Contents
+---------------
+
+.. data:: cs
+   :annotation: = 1
+
+   
+
+.. data:: M
+   :annotation: = 10
+
+   
+
+.. data:: G
+   :annotation: = 1
+
+   
+
+.. data:: mB
+   :annotation: = 1
+
+   
+
+.. data:: dPdS
+   :annotation: = 1
+
+   
+
+.. data:: Se
+   :annotation: = 0
+
+   
+
+.. data:: rho
+   :annotation: = 1
+
+   
+
+.. data:: T
+   :annotation: = 1
+
+   
+
+.. data:: r0
+   :annotation: = 1
+
+   
+
+.. function:: ndf1(psi, coords)
+
+   Dimensionless f1 function, takes t,(x,y) and returns 1-exp[2y]
+
+
+.. function:: ndf2(psi, coords)
+
+   Dimensionless f2 function, takes t,(x,y) and returns (GM/r0*cs^2)exp[-x]-2
+
+
+.. function:: CoupledRungeKuttaStep(af1, af2, fn, t, dt)
+
+   Takes functions af1 and af2, state f(n), t and dt, and steps f(n) to f(n+dt) using an RK4 method with arbitrary input functions f1 and f2
+   Returns t+dt,f(n+dt)
+
+
+.. function:: percentChange(curr, step)
+
+   Takes a current state and a new state (vectors) and calculates the percent change
+
+
+.. function:: generateFunc(x0, u0, itermax)
+
+   Generates a trace of wind behavior with initial conditions x0 and u0 (dimensionless) using the RK4 method with adaptation in dt
+   Takes x0, u0, max iteration count and returns a 2D array tracking t, x, and u
+
+
+.. function:: makePlot(minX, maxX, dx)
+
+   Generates a plot of wind curves
+   Takes minX, maxX, dx and generates a curve for x0 (u0=0), then increments x0 by dx and generates a new curve, repeating until x0=maxX
+   Returns 0, prints a plot of the different wind curves
+
+
+.. function:: testf(t, x)
+
+
+.. function:: testf2(t, x)
+
+
+.. function:: generateTestFunc(x0, y0)
+
+
+.. data:: func2
+   
+
+   
+
+.. function:: ndf1(psi, coords)
+
+
+.. function:: ndf2(psi, coords)
+
+
+.. data:: sol
+   
+
+   
+

@@ -1,0 +1,16 @@
+:mod:`neutrino-winds.tests`
+===========================
+
+.. py:module:: neutrino-winds.tests
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   conftest/index.rst
+   test_examples/index.rst
+
+

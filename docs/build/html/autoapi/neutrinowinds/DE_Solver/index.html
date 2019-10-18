@@ -1,0 +1,227 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>neutrino-winds.DE_Solver &#8212; neutrino-winds  documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-neutrino-winds.DE_Solver">
+<span id="neutrino-winds-de-solver"></span><h1><a class="reference internal" href="#module-neutrino-winds.DE_Solver" title="neutrino-winds.DE_Solver"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neutrino-winds.DE_Solver</span></code></a><a class="headerlink" href="#module-neutrino-winds.DE_Solver" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<dl class="data">
+<dt id="neutrino-winds.DE_Solver.cs">
+<code class="sig-prename descclassname">neutrino-winds.DE_Solver.</code><code class="sig-name descname">cs</code><em class="property"> = 1</em><a class="headerlink" href="#neutrino-winds.DE_Solver.cs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="neutrino-winds.DE_Solver.M">
+<code class="sig-prename descclassname">neutrino-winds.DE_Solver.</code><code class="sig-name descname">M</code><em class="property"> = 10</em><a class="headerlink" href="#neutrino-winds.DE_Solver.M" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="neutrino-winds.DE_Solver.G">
+<code class="sig-prename descclassname">neutrino-winds.DE_Solver.</code><code class="sig-name descname">G</code><em class="property"> = 1</em><a class="headerlink" href="#neutrino-winds.DE_Solver.G" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="neutrino-winds.DE_Solver.mB">
+<code class="sig-prename descclassname">neutrino-winds.DE_Solver.</code><code class="sig-name descname">mB</code><em class="property"> = 1</em><a class="headerlink" href="#neutrino-winds.DE_Solver.mB" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="neutrino-winds.DE_Solver.dPdS">
+<code class="sig-prename descclassname">neutrino-winds.DE_Solver.</code><code class="sig-name descname">dPdS</code><em class="property"> = 1</em><a class="headerlink" href="#neutrino-winds.DE_Solver.dPdS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="neutrino-winds.DE_Solver.Se">
+<code class="sig-prename descclassname">neutrino-winds.DE_Solver.</code><code class="sig-name descname">Se</code><em class="property"> = 0</em><a class="headerlink" href="#neutrino-winds.DE_Solver.Se" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="neutrino-winds.DE_Solver.rho">
+<code class="sig-prename descclassname">neutrino-winds.DE_Solver.</code><code class="sig-name descname">rho</code><em class="property"> = 1</em><a class="headerlink" href="#neutrino-winds.DE_Solver.rho" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="neutrino-winds.DE_Solver.T">
+<code class="sig-prename descclassname">neutrino-winds.DE_Solver.</code><code class="sig-name descname">T</code><em class="property"> = 1</em><a class="headerlink" href="#neutrino-winds.DE_Solver.T" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="neutrino-winds.DE_Solver.r0">
+<code class="sig-prename descclassname">neutrino-winds.DE_Solver.</code><code class="sig-name descname">r0</code><em class="property"> = 1</em><a class="headerlink" href="#neutrino-winds.DE_Solver.r0" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="neutrino-winds.DE_Solver.ndf1">
+<code class="sig-prename descclassname">neutrino-winds.DE_Solver.</code><code class="sig-name descname">ndf1</code><span class="sig-paren">(</span><em class="sig-param">psi</em>, <em class="sig-param">coords</em><span class="sig-paren">)</span><a class="headerlink" href="#neutrino-winds.DE_Solver.ndf1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dimensionless f1 function, takes t,(x,y) and returns 1-exp[2y]</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="neutrino-winds.DE_Solver.ndf2">
+<code class="sig-prename descclassname">neutrino-winds.DE_Solver.</code><code class="sig-name descname">ndf2</code><span class="sig-paren">(</span><em class="sig-param">psi</em>, <em class="sig-param">coords</em><span class="sig-paren">)</span><a class="headerlink" href="#neutrino-winds.DE_Solver.ndf2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dimensionless f2 function, takes t,(x,y) and returns (GM/r0*cs^2)exp[-x]-2</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="neutrino-winds.DE_Solver.CoupledRungeKuttaStep">
+<code class="sig-prename descclassname">neutrino-winds.DE_Solver.</code><code class="sig-name descname">CoupledRungeKuttaStep</code><span class="sig-paren">(</span><em class="sig-param">af1</em>, <em class="sig-param">af2</em>, <em class="sig-param">fn</em>, <em class="sig-param">t</em>, <em class="sig-param">dt</em><span class="sig-paren">)</span><a class="headerlink" href="#neutrino-winds.DE_Solver.CoupledRungeKuttaStep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes functions af1 and af2, state f(n), t and dt, and steps f(n) to f(n+dt) using an RK4 method with arbitrary input functions f1 and f2
+Returns t+dt,f(n+dt)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="neutrino-winds.DE_Solver.percentChange">
+<code class="sig-prename descclassname">neutrino-winds.DE_Solver.</code><code class="sig-name descname">percentChange</code><span class="sig-paren">(</span><em class="sig-param">curr</em>, <em class="sig-param">step</em><span class="sig-paren">)</span><a class="headerlink" href="#neutrino-winds.DE_Solver.percentChange" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a current state and a new state (vectors) and calculates the percent change</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="neutrino-winds.DE_Solver.generateFunc">
+<code class="sig-prename descclassname">neutrino-winds.DE_Solver.</code><code class="sig-name descname">generateFunc</code><span class="sig-paren">(</span><em class="sig-param">x0</em>, <em class="sig-param">u0</em>, <em class="sig-param">itermax</em><span class="sig-paren">)</span><a class="headerlink" href="#neutrino-winds.DE_Solver.generateFunc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a trace of wind behavior with initial conditions x0 and u0 (dimensionless) using the RK4 method with adaptation in dt
+Takes x0, u0, max iteration count and returns a 2D array tracking t, x, and u</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="neutrino-winds.DE_Solver.makePlot">
+<code class="sig-prename descclassname">neutrino-winds.DE_Solver.</code><code class="sig-name descname">makePlot</code><span class="sig-paren">(</span><em class="sig-param">minX</em>, <em class="sig-param">maxX</em>, <em class="sig-param">dx</em><span class="sig-paren">)</span><a class="headerlink" href="#neutrino-winds.DE_Solver.makePlot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a plot of wind curves
+Takes minX, maxX, dx and generates a curve for x0 (u0=0), then increments x0 by dx and generates a new curve, repeating until x0=maxX
+Returns 0, prints a plot of the different wind curves</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="neutrino-winds.DE_Solver.testf">
+<code class="sig-prename descclassname">neutrino-winds.DE_Solver.</code><code class="sig-name descname">testf</code><span class="sig-paren">(</span><em class="sig-param">t</em>, <em class="sig-param">x</em><span class="sig-paren">)</span><a class="headerlink" href="#neutrino-winds.DE_Solver.testf" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="neutrino-winds.DE_Solver.testf2">
+<code class="sig-prename descclassname">neutrino-winds.DE_Solver.</code><code class="sig-name descname">testf2</code><span class="sig-paren">(</span><em class="sig-param">t</em>, <em class="sig-param">x</em><span class="sig-paren">)</span><a class="headerlink" href="#neutrino-winds.DE_Solver.testf2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="neutrino-winds.DE_Solver.generateTestFunc">
+<code class="sig-prename descclassname">neutrino-winds.DE_Solver.</code><code class="sig-name descname">generateTestFunc</code><span class="sig-paren">(</span><em class="sig-param">x0</em>, <em class="sig-param">y0</em><span class="sig-paren">)</span><a class="headerlink" href="#neutrino-winds.DE_Solver.generateTestFunc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="neutrino-winds.DE_Solver.func2">
+<code class="sig-prename descclassname">neutrino-winds.DE_Solver.</code><code class="sig-name descname">func2</code><a class="headerlink" href="#neutrino-winds.DE_Solver.func2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt>
+<code class="sig-prename descclassname">neutrino-winds.DE_Solver.</code><code class="sig-name descname">ndf1</code><span class="sig-paren">(</span><em class="sig-param">psi</em>, <em class="sig-param">coords</em><span class="sig-paren">)</span></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt>
+<code class="sig-prename descclassname">neutrino-winds.DE_Solver.</code><code class="sig-name descname">ndf2</code><span class="sig-paren">(</span><em class="sig-param">psi</em>, <em class="sig-param">coords</em><span class="sig-paren">)</span></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="neutrino-winds.DE_Solver.sol">
+<code class="sig-prename descclassname">neutrino-winds.DE_Solver.</code><code class="sig-name descname">sol</code><a class="headerlink" href="#neutrino-winds.DE_Solver.sol" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">neutrino-winds</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Brian Nevins.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../../_sources/autoapi/neutrinowinds/DE_Solver/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
