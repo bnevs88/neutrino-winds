@@ -430,6 +430,7 @@ class solver():
             i=i+1
         if i>=itermax:
             print("Max iteration count exceeded")
+            raise ValueError
         return v0+dv
 
     def findV0(self,lowerguess,upperguess,dv,maxprecision=1e-10,itermax=10000,xrange=10,urange=5):
@@ -468,9 +469,12 @@ class solver():
         upper=self.findVboundary(upperguess,-dv,maxprecision,itermax)
         #print(upper)
         lower=self.findVboundary(lowerguess,dv,maxprecision,itermax)
-
+        
         print("Lower bound on v0: ",lower)
         print("Upper bound on v0: ",upper)
+        if lower>upper:
+            print("lower bound greater than upper, exiting")
+            raise ValueError
         print("Estimated v0: ",(lower+upper)/2)
         print("Estimated error: ",(upper-lower)/2)
         self.makePlot(lower,False,xrange,urange)
