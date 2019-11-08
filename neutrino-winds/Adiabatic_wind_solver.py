@@ -430,9 +430,14 @@ class solver():
             i=i+1
         if i>=itermax:
             print("Max iteration count exceeded")
-            raise ValueError
+            raise Exception("MaxIterExceeded")
         return v0+dv
 
+    class NoSignChange(Exception):
+        def __init__(self, message='No sign change'):
+        # Call the base class constructor with the parameters it needs
+            super(NoSignChange, self).__init__(message)
+    
     def findV0(self,lowerguess,upperguess,dv,maxprecision=1e-10,itermax=10000,xrange=10,urange=5):
         """Finds boundary values for v0 and estimates an exact value for it
 
@@ -465,7 +470,11 @@ class solver():
         assert xrange>1, "Expected xrange>1"
         assert type(urange)==int or type(urange)==float, "Expected numerical input"
         assert urange>0, "Expected positive urange"
-
+        
+        if np.sign(self.findZeros(upperguess))==np.sign(self.findZeros(lowerguess)):
+            print("No sign change in specified range")
+            raise Exception("NoSignChange")
+        
         upper=self.findVboundary(upperguess,-dv,maxprecision,itermax)
         #print(upper)
         lower=self.findVboundary(lowerguess,dv,maxprecision,itermax)
@@ -474,7 +483,7 @@ class solver():
         print("Upper bound on v0: ",upper)
         if lower>upper:
             print("lower bound greater than upper, exiting")
-            raise ValueError
+            raise Exception("BoundError")
         print("Estimated v0: ",(lower+upper)/2)
         print("Estimated error: ",(upper-lower)/2)
         self.makePlot(lower,False,xrange,urange)
