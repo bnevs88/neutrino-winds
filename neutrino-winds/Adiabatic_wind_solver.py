@@ -205,11 +205,8 @@ class solver():
             step=self.CoupledRKStep(funs,[t,currState],dt)
 
             #Calculate percent change from current state to predicted next state
-            try:
-                pc=self.percentChange(currState,step[1])
-            except:
-                print("Error at %change, currState: ",currState," step: ",step)
-                break
+            
+            pc=self.percentChange(currState,step[1])
 
             #If the percent change is too large or too small, change dt to compensate
             if pc>1 or pc<.1:
@@ -255,6 +252,9 @@ class solver():
 
         func=self.generateFunc(np.array([0,np.log(u0),self.W0]),10000,AV,xrange,urange)
         plt.scatter(np.exp(func[1]),np.exp(func[2]),s=.5);
+        plt.title("Velocity vs Radius (Dimensionless), v0=%1.9f"%u0)
+        plt.xlabel("r/r0")
+        plt.ylabel("v/cs")
         return 0
 
     def makePlots(self,vmin,vmax,dv,AV=True,xrange=10,urange=5):
@@ -307,16 +307,28 @@ class solver():
 
         print("v vs r:")
         plt.figure(1)
+        plt.title("Velocity vs Radius (Dimensionless)")
         for i in range(len(data)):
-            plt.scatter(np.exp(data[i][1]),np.exp(data[i][2]),s=.5);
+            plt.scatter(np.exp(data[i][1]),np.exp(data[i][2]),s=.5,label='v0/cs=%g'%np.exp(data[i][2][0]));
+        plt.xlabel("r/r0")
+        plt.ylabel("v/cs")
+        plt.legend(loc="upper left", bbox_to_anchor=(1,1))
         print("T vs r:")
         plt.figure(2)
+        plt.title("Temperature vs Radius (Dimensionless)")
         for i in range(len(data)):
-            plt.scatter(np.exp(data[i][1]),np.exp(data[i][3]),s=.5);
+            plt.scatter(np.exp(data[i][1]),np.exp(data[i][3]),s=.5,label='v0/cs=%g'%np.exp(data[i][2][0]));
+        plt.xlabel("r/r0")
+        plt.ylabel("v/cs")
+        plt.legend(loc="upper left", bbox_to_anchor=(1,1))
         print("T vs v:")
         plt.figure(3)
+        plt.title("Temperature vs Velocity (Dimensionless)")
         for i in range(len(data)):
-            plt.scatter(np.exp(data[i][2]),np.exp(data[i][3]),s=.5);
+            plt.scatter(np.exp(data[i][2]),np.exp(data[i][3]),s=.5,label='v0/cs=%g'%np.exp(data[i][2][0]));
+        plt.xlabel("r/r0")
+        plt.ylabel("v/cs")
+        plt.legend(loc="upper left", bbox_to_anchor=(1,1))
         return 0
 
     def findZeros(self,v0):
@@ -352,11 +364,8 @@ class solver():
             step=self.CoupledRKStep([self.adx,self.adu,self.adw],np.array([t,currState]),dt)
 
             #Calculate percent change from current state to predicted next state
-            try:
-                pc=self.percentChange(currState,step[1])
-            except:
-                print("Error at %change, currState: ",currState," step: ",step)
-                break
+            
+            pc=self.percentChange(currState,step[1])
 
             #If the percent change is too large or too small, change dt to compensate
             if pc>1 or pc<.1:
@@ -416,10 +425,9 @@ class solver():
             while (v0+dv)<=0:
                 #print("error incoming, v0=",v0,", dv=",dv)
                 dv=dv/2
-            try:
-                self.findZeros(v0+dv)
-            except:
-                print("error, v0=",v0,", dv=",dv)
+                
+            self.findZeros(v0+dv)
+            
             while np.sign(self.findZeros(v0+dv))!=np.sign(self.findZeros(v0)):
                 dv=dv/2
                 while (v0+dv)<=0:
@@ -457,11 +465,11 @@ class solver():
         Displays plot of the wind curves for the boundary values of v0"""
 
         assert type(lowerguess)==float
-        assert lowerguess>0, "Expected positive input"
+        assert lowerguess>0, "Expected positive input, got %"%lowerguess
         assert type(upperguess)==float, "Expected float input"
-        assert upperguess>0, "Expected positive input"
+        assert upperguess>0, "Expected positive input, got %f"%upperguess
         assert type(dv)==float, "Expected float input"
-        assert dv>0, "Expected positive input"
+        assert dv>0, "Expected positive input, got %"%dv
         assert type(maxprecision)==float, "Expected float input"
         assert maxprecision>0, "Expected positive input"
         assert type(itermax)==int, "Expected integer input"
@@ -473,7 +481,7 @@ class solver():
         
         if np.sign(self.findZeros(upperguess))==np.sign(self.findZeros(lowerguess)):
             print("No sign change in specified range")
-            raise Exception("NoSignChange")
+            raise ValueError#Exception("NoSignChange")
         
         upper=self.findVboundary(upperguess,-dv,maxprecision,itermax)
         #print(upper)
@@ -481,8 +489,8 @@ class solver():
         
         print("Lower bound on v0: ",lower)
         print("Upper bound on v0: ",upper)
-        if lower>upper:
-            print("lower bound greater than upper, exiting")
+        if abs(lower-upper)>1e-2:
+            print("divergent bounds, exiting")
             raise Exception("BoundError")
         print("Estimated v0: ",(lower+upper)/2)
         print("Estimated error: ",(upper-lower)/2)
