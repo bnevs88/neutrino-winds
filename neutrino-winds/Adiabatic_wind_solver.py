@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import scipy.optimize as sco
 from IPython.display import clear_output
 import os
 import contextlib
@@ -270,7 +269,7 @@ class solver():
         plt.ylim(0,urange)
 
         func=self.generateFunc(np.array([0,np.log(u0),self.W0]),10000,AV,xrange,urange)
-        plt.scatter(np.exp(func[1]),np.exp(func[2]),s=.5);
+        plt.scatter(np.exp(func[1]),np.exp(func[2]-func[3]/2),s=.5);
         plt.title("Velocity vs Radius (Dimensionless), v0=%1.9f"%u0)
         plt.xlabel("r/r0")
         plt.ylabel("v/cs")
@@ -319,29 +318,29 @@ class solver():
                 #print(i)
                 #print(data)
                 data.append(func)
-            plt.scatter(np.exp(func[1]),np.exp(func[2]),s=.5);
+            #plt.scatter(np.exp(func[1]),np.exp(func[2]-func[3]/2),s=.5);
 
         plt.figure(1)
         plt.title("Velocity vs Radius (Dimensionless)")
         for i in range(len(data)):
-            plt.scatter(np.exp(data[i][1]),np.exp(data[i][2]),s=.5,label='v0/cs=%g'%np.exp(data[i][2][0]));
+            plt.scatter(np.exp(data[i][1]),np.exp(data[i][2]-data[i][3]/2),s=.5,label='v0/cs=%g'%np.exp(data[i][2][0]));
         plt.xlabel("r/r0")
         plt.ylabel("v/cs")
         plt.legend(loc="upper left", bbox_to_anchor=(1,1))
-        plt.figure(2)
-        plt.title("Temperature vs Radius (Dimensionless)")
-        for i in range(len(data)):
-            plt.scatter(np.exp(data[i][1]),np.exp(data[i][3]),s=.5,label='v0/cs=%g'%np.exp(data[i][2][0]));
-        plt.xlabel("r/r0")
-        plt.ylabel("v/cs")
-        plt.legend(loc="upper left", bbox_to_anchor=(1,1))
-        plt.figure(3)
-        plt.title("Temperature vs Velocity (Dimensionless)")
-        for i in range(len(data)):
-            plt.scatter(np.exp(data[i][2]),np.exp(data[i][3]),s=.5,label='v0/cs=%g'%np.exp(data[i][2][0]));
-        plt.xlabel("r/r0")
-        plt.ylabel("v/cs")
-        plt.legend(loc="upper left", bbox_to_anchor=(1,1))
+#         plt.figure(2)
+#         plt.title("Temperature vs Radius (Dimensionless)")
+#         for i in range(len(data)):
+#             plt.scatter(np.exp(data[i][1]),np.exp(data[i][3]),s=.5,label='v0/cs=%g'%np.exp(data[i][2][0]));
+#         plt.xlabel("r/r0")
+#         plt.ylabel("v/cs")
+#         plt.legend(loc="upper left", bbox_to_anchor=(1,1))
+#         plt.figure(3)
+#         plt.title("Temperature vs Velocity (Dimensionless)")
+#         for i in range(len(data)):
+#             plt.scatter(np.exp(data[i][2]),np.exp(data[i][3]),s=.5,label='v0/cs=%g'%np.exp(data[i][2][0]));
+#         plt.xlabel("r/r0")
+#         plt.ylabel("v/cs")
+#         plt.legend(loc="upper left", bbox_to_anchor=(1,1))
         
 
     def findZeros(self,v0):
@@ -452,7 +451,7 @@ class solver():
             raise Exception("MaxIterExceeded")
         return v0+dv
     
-    def findV0(self,lowerguess,upperguess,dv,maxprecision=1e-10,itermax=10000,xrange=10,urange=5,show=True):
+    def findV0(self,lowerguess,upperguess,dv,maxprecision=1e-10,itermax=10000,xrange=10,urange=5,show=True,showPlot=False):
         """Finds boundary values for v0 and estimates an exact value for it
 
         Parameters:
@@ -502,6 +501,7 @@ class solver():
                 raise BoundError
             print("Estimated v0: ",(lower+upper)/2)
             print("Estimated error: ",abs((upper-lower)/2))
+        if showPlot:
             self.makePlot(lower,False,xrange,urange)
             self.makePlot(upper,False,xrange,urange)
 
@@ -576,6 +576,7 @@ class solver():
         if i>=itermax: 
             print("Max iteration count exceeded at gamma =",self.gamma)
             print("No sign change above v0/cs =",lower)
+            
         if len(gdata)>0:    
             plt.figure(1)
             plt.title("Critical velocity vs. Gamma")

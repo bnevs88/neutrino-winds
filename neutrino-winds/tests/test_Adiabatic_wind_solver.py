@@ -20,4 +20,6 @@ def test_generateFunc():
 def test_findV0():
     s=aws.solver()
     assert s.findV0(.004,.006,.0001)==pytest.approx(0.005075319385528564)
+    s1=aws.solver(5/3,.1)
+    assert s1.findV0(.001,.003,.0001)==pytest.approx(0.002506094169616698)
     
