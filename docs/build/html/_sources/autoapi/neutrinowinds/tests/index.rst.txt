@@ -11,6 +11,6 @@ Submodules
    :maxdepth: 1
 
    conftest/index.rst
-   test_examples/index.rst
+   test_Adiabatic_wind_solver/index.rst
 
 

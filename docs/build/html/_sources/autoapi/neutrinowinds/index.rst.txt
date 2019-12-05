@@ -19,6 +19,7 @@ Submodules
    :titlesonly:
    :maxdepth: 1
 
+   Adiabatic_wind_solver/index.rst
    DE_Solver/index.rst
    _version/index.rst
 

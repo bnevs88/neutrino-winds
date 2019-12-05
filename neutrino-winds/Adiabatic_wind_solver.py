@@ -274,7 +274,7 @@ class solver():
         plt.ylabel("v/cs")
         
 
-    def makePlots(self, vmin, vmax, dv, AV=True, xrange=10, urange=5):
+    def makePlots(self, vmin, vmax, dv, AV=True, xrange=10, urange=5, showAll=False):
         """Generates a plot of wind curves
         Takes vmin, vmax, dv and generates a curve for u0 (x0 = 0), then increments v0 by dv and generates a new curve, repeating until v0 = umax
         Expects vmin, vmax, and dv scaled by 1/cs
@@ -287,6 +287,7 @@ class solver():
             AV: Use absolute value of f1 and f2 functions (boolean)
             xrange: maximum x value to display on plot (displays (1, xrange))
             urange: maximum u value to display on plot (displays (0, urange))
+            showAll: boolean, True will plot additional graphs of velocity and temperature
 
         Displays a plot of several different wind curves"""
 
@@ -322,20 +323,21 @@ class solver():
         plt.xlabel("r/r0")
         plt.ylabel("v/cs")
         plt.legend(loc="upper left", bbox_to_anchor=(1, 1))
-#         plt.figure(2)
-#         plt.title("Temperature vs Radius (Dimensionless)")
-#         for i in range(len(data)):
-#             plt.scatter(np.exp(data[i][1]), np.exp(data[i][3]), s = .5, label = 'v0/cs = %g'%np.exp(data[i][2][0]));
-#         plt.xlabel("r/r0")
-#         plt.ylabel("v/cs")
-#         plt.legend(loc = "upper left", bbox_to_anchor = (1, 1))
-#         plt.figure(3)
-#         plt.title("Temperature vs Velocity (Dimensionless)")
-#         for i in range(len(data)):
-#             plt.scatter(np.exp(data[i][2]), np.exp(data[i][3]), s = .5, label = 'v0/cs = %g'%np.exp(data[i][2][0]));
-#         plt.xlabel("r/r0")
-#         plt.ylabel("v/cs")
-#         plt.legend(loc = "upper left", bbox_to_anchor = (1, 1))
+        if showAll:
+            plt.figure(2)
+            plt.title("Temperature vs Radius (Dimensionless)")
+            for i in range(len(data)):
+                plt.scatter(np.exp(data[i][1]), np.exp(data[i][3]), s = .5, label = 'v0/cs = %g'%np.exp(data[i][2][0]));
+            plt.xlabel("r/r0")
+            plt.ylabel("v/cs")
+            plt.legend(loc = "upper left", bbox_to_anchor = (1, 1))
+            plt.figure(3)
+            plt.title("Temperature vs Velocity (Dimensionless)")
+            for i in range(len(data)):
+                plt.scatter(np.exp(data[i][2]), np.exp(data[i][3]), s = .5, label = 'v0/cs = %g'%np.exp(data[i][2][0]));
+            plt.xlabel("r/r0")
+            plt.ylabel("v/cs")
+            plt.legend(loc = "upper left", bbox_to_anchor = (1, 1))
         
 
     def findZeros(self, v0):
