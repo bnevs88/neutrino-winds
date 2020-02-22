@@ -19,7 +19,7 @@ public:
 	double dw(double t, double state[]);
 };
 
-Equations::Equations(double g=5./3., double a0=10., bool absolute = true)
+Equations::Equations(double g=1., double a0=10., bool absolute = true)
 {
 	gamma = g;
 	a = a0;

@@ -17,7 +17,7 @@ private:
 public:
 	double* coupledRKStep(double t, double dt0, double state[]); //the output will be a pointer to an array
 	Integrator(double initialState[], Equations equations);
-	vector<double> generateFunction(double initialState[]); 
+	vector<double*> generateFunction(double initialState[], double xrange, double urange, int itermax); 
 };
 
 Integrator::Integrator(double initialState[], Equations equations)
@@ -72,9 +72,22 @@ double* Integrator::coupledRKStep(double t, double dt0, double state[])//adaptiv
 		if (pc > 1) { dt = dt / 2; }
 		else if (pc < .1) { dt = 2 * dt; };
 	}
-	cout << "\nStep:\n";
+	/*cout << "\nStep:\n";
 	for (int i = 0; i < 3; i++) {
 		cout << step[i]<<"\n";
-	}
+	}*/
 	return step;
+}
+
+vector<double*> Integrator::generateFunction(double initialState[], double xrange=10, double urange=5, int itermax=10000)
+{
+	vector<double*> data;
+	data.push_back(initialState);
+	int i = 0;//iterator
+	while (exp(data.back()[0]) > .0000001 && exp(data.back()[0]) < xrange && i < itermax) {
+		//cout << "x: " << exp(data.back()[0]);
+		data.push_back(coupledRKStep(0, .01, data.back()));
+		i++;
+	}
+	return data;
 }
