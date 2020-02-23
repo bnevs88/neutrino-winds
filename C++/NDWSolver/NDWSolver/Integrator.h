@@ -19,6 +19,7 @@ public:
 	void writeToFile(string fileName);
 	double findZeros(double initialState[], int itermax);
 	double findV0(double maxprecision, int itermax);
+	void scan(string fileName, double lower, double upper, int N);
 };
 
 Integrator::Integrator(Equations equations)
@@ -91,9 +92,9 @@ vector<double*> Integrator::generateFunction(double initialState[], double xrang
 	return data;
 }
 
-void Integrator::writeToFile(string filename) 
+void Integrator::writeToFile(string fileName) 
 {
-	ofstream output(filename);
+	ofstream output(fileName);
 	for (int i = 0; i < data.size(); i++) {
 		for (int j = 0; j < 4; j++) {
 			output << data[i][j]<<" ";
@@ -123,7 +124,8 @@ double Integrator::findZeros(double initialState[], int itermax=10000)
 	return tu - tx;
 }
 
-double Integrator::findV0(double maxprecision = 1E-10, int itermax = 10000) {
+double Integrator::findV0(double maxprecision = 1E-10, int itermax = 10000) 
+{
 	double v0 = 0;
 	double dv = .5;
 	double testState[4] = { 0,0,0,0 };
@@ -137,4 +139,29 @@ double Integrator::findV0(double maxprecision = 1E-10, int itermax = 10000) {
 	};
 	if (i >= itermax) { cout << "Max iteration count exceeded" << endl; };
 	return v0 + dv;
+}
+
+void Integrator::scan(string fileName, double lower = .001, double upper = .01, int N = 10)
+{
+	ofstream output(fileName);
+	for (double v = lower; v < upper; v = v + (upper-lower)/N) {
+		cout << "Making data for v=" << v << endl;
+		vector<double*> d = generateFunction(new double[4]{ 0,0,log(v),0 },50.);
+		for (int i = 0; i < d.size(); i++) {
+			for (int j = 0; j < 4; j++) {
+				output << d[i][j] << " ";
+			}
+			output << "\n";
+		}
+		d.clear();
+	}
+	cout << "Making data for v=" << findV0() << endl;
+	vector<double*> d = generateFunction(new double[4]{ 0,0,log(findV0()),0 }, 50.);
+	for (int i = 0; i < d.size(); i++) {
+		for (int j = 0; j < 4; j++) {
+			output << d[i][j] << " ";
+		}
+		output << "\n";
+	}
+	output.close();
 }
