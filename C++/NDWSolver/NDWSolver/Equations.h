@@ -8,15 +8,15 @@ class Equations {
 private:
 	double gamma;
 	double a;
-	double ndf1(double t, double state[]);
-	double ndf2(double t, double state[]);
 	bool abs;
 public:
 	int size();
 	Equations(double g, double a0, bool absolute);
-	double dx(double t, double state[]);
-	double du(double t, double state[]);
-	double dw(double t, double state[]);
+	double ndf1(double state[]);
+	double ndf2(double state[]);
+	double dx(double state[]);
+	double du(double state[]);
+	double dw(double state[]);
 };
 
 Equations::Equations(double g=1., double a0=10., bool absolute = true)
@@ -26,34 +26,34 @@ Equations::Equations(double g=1., double a0=10., bool absolute = true)
 	abs = absolute;
 };
 
-double Equations::ndf1(double t, double state[])
+double Equations::ndf1(double state[])
 {
-	return 1. - exp(2. * state[1] - state[2]);
+	return 1. - exp(2. * state[2] - state[3]);
 };
 
-double Equations::ndf2(double t, double state[])
+double Equations::ndf2(double state[])
 {
-	return a * exp(-state[0] - state[2]) - 2.;
+	return a * exp(-state[1] - state[3]) - 2.;
 };
 
-double Equations::dx(double t, double state[])
+double Equations::dx(double state[])
 {
-	if (abs) { return fabs(ndf1(t, state)); };
-	return ndf1(t, state);
+	if (abs) { return fabs(ndf1(state)); };
+	return ndf1(state);
 };
 
-double Equations::du(double t, double state[])
+double Equations::du(double state[])
 {
-	if (abs) { return fabs(ndf2(t, state)); };
-	return ndf2(t, state);
+	if (abs) { return fabs(ndf2(state)); };
+	return ndf2(state);
 };
 
-double Equations::dw(double t, double state[])
+double Equations::dw(double state[])
 {
 	if (abs) {  
-		return -(gamma - 1.) * (2. * fabs(ndf1(t, state)) + fabs(ndf2(t, state))); 
+		return -(gamma - 1.) * (2. * fabs(ndf1(state)) + fabs(ndf2(state))); 
 	};
-	return -(gamma - 1.) * (2. * ndf1(t, state) + ndf2(t, state));
+	return -(gamma - 1.) * (2. * ndf1(state) + ndf2(state));
 };
 
 int Equations::size()
