@@ -8,10 +8,11 @@ class Equations {
 private:
 	double gamma;
 	double a;
+	double b;
 	bool abs;
 public:
 	int size();
-	Equations(double g, double a0, bool absolute);
+	Equations(double g, double a0, double b0, bool absolute);
 	double ndf1(double state[]);
 	double ndf2(double state[]);
 	double dx(double state[]);
@@ -19,10 +20,11 @@ public:
 	double dw(double state[]);
 };
 
-Equations::Equations(double g=1., double a0=10., bool absolute = true)
+Equations::Equations(double g=1., double a0=10., double b0=0., bool absolute = true)
 {
 	gamma = g;
 	a = a0;
+	b = b0;
 	abs = absolute;
 };
 
@@ -51,9 +53,9 @@ double Equations::du(double state[])
 double Equations::dw(double state[])
 {
 	if (abs) {  
-		return -(gamma - 1.) * (2. * fabs(ndf1(state)) + fabs(ndf2(state))); 
+		return double(-(gamma - 1.) * (2. * fabs(ndf1(state)) + fabs(ndf2(state)) - b * fabs(ndf1(state)) * exp(-state[1] - state[2] - state[3])));
 	};
-	return -(gamma - 1.) * (2. * ndf1(state) + ndf2(state));
+	return -(gamma - 1.) * (2. * ndf1(state) + ndf2(state) - b * ndf1(state) * exp(-state[1] - state[2] - state[3]));
 };
 
 int Equations::size()
