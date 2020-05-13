@@ -13,7 +13,7 @@ private:
 	int statelen;
 	
 public:
-	double* coupledRKStep(double dt0, double state[]); //the output will be a pointer to an array
+	double* coupledRKStep(double dt0, double state[], int itermax); //the output will be a pointer to an array
 	Integrator(Equations equations);
 	vector<double*> generateFunction(double initialState[], double xrange, double urange, int itermax); 
 	void writeToFile(string fileName);
@@ -37,19 +37,21 @@ void Integrator::printState(double state[])
 	cout << endl;
 }
 
-double* Integrator::coupledRKStep(double dt0, double state[])//adaptive RK4 step
+double* Integrator::coupledRKStep(double dt0, double state[], int itermax=100000)//adaptive RK4 step
 {
 	double karr[3][4] = { { 0,0,0,0 },{ 0,0,0,0 },{ 0,0,0,0 } };
 	double* step=new double[4];
 	double dt = dt0;
 	double pc = 100;
+	double range = .01;
 	double statenorm = 0.;
 	for (int i = 1; i < 4; i++) {
 		statenorm += pow(state[i],2);
 	}
 	statenorm = sqrt(statenorm);
 	//cout << "Statenorm: " << statenorm << endl;
-	while (pc > 1 or pc < .1) {
+	int it = 0;
+	while ((pc > range or pc < range/10.) and it<itermax) {
 		for (int j = 0; j < 4; j++) { //j iterates through k1,k2,k3,k4 for the RK4 step
 			if (j == 0) {
 				karr[0][j] = dt * eqs.dx(state);
@@ -74,12 +76,12 @@ double* Integrator::coupledRKStep(double dt0, double state[])//adaptive RK4 step
 				//			cout << karr[i][l] << endl;
 				//		}
 				//	}
-				//	cout << "differentials: " << endl;
-				//	cout << dt << endl;
-				//	cout << eqs.dx(newstate) << endl;
-				//	cout << eqs.du(newstate) << endl;
-				//	cout << eqs.dw(newstate) << endl;
-				//	cout << endl;
+				/*cout << "differentials: " << endl;
+				cout << dt << endl;
+				cout << eqs.dx(newstate) << endl;
+				cout << eqs.du(newstate) << endl;
+				cout << eqs.dw(newstate) << endl;
+				cout << endl;*/
 				//}
 				for (int i = 0; i < 3; i++) {
 					step[i+1] = state[i+1] + (karr[i][0] + 2. * karr[i][1] + 2. * karr[i][2] + karr[i][3]) / 6.;
@@ -93,44 +95,39 @@ double* Integrator::coupledRKStep(double dt0, double state[])//adaptive RK4 step
 		}
 		stepnorm = sqrt(stepnorm);
 		pc = 100 * stepnorm / statenorm;
-		if (pc > 1) { dt = dt / 2; }
-		else if (pc < .1) { dt = 2 * dt; };
+		if (pc > range) { dt = dt / 2.; }
+		else if (pc < range/10.) { dt = 1.9 * dt; };
+		it++;
 	}
-	//cout << "\nState, Step:\n";
-	//for (int i = 0; i < 4; i++) {
-	//	cout << state[i] << ", " << step[i] << endl;
-	//}
+	if (it >= itermax) { cout << "Max iteration count exceeded in coupledRKStep, pc=" << pc << endl; printState(step); };
+	/*cout << "pc=" << pc << ", ";
+	for (int i = 0; i < 4; i++) {
+		cout << step[i] << ", ";
+	};*/
 	return step;
 }
 
-vector<double*> Integrator::generateFunction(double initialState[], double xrange=10, double urange=5, int itermax=10000)
+vector<double*> Integrator::generateFunction(double initialState[], double xrange=10, double urange=5, int itermax=100000)
 {
 	data.clear();
 	data.push_back(initialState);
 	int i = 0;//iterator
-	//for (int j = 0; j < 4; j++) {
-	//	cout << initialState[j] << endl;
-	//}
-	//cout << endl;
+	//cout << "generating function" << endl;
 	while (exp(data.back()[1]) > .0000001 && exp(data.back()[1]) < xrange && i < itermax) {
-		//cout << "x: " << exp(data.back()[0]);
+		//cout << "r=" << exp(data.back()[1]) << endl;
 		double* step = coupledRKStep(.0001, data.back());
-		//for (int j = 0; j < 4; j++) {
-		//	cout << step[j] << endl;
-		//}
-		//cout << endl;
 		data.push_back(step);
 		i++;
 	}
 	if (i >= itermax) { cout << "Exceeded max iteration count in generateFunction" << endl; };
-	if (exp(data.back()[1]) <= .0000001) { cout << "x too small: " << exp(data.back()[1]) << endl; };
-	if (exp(data.back()[1]) >= xrange) { 
-		cout << "x too big: "; 
-		printState(data.end()[-1]); 
-		cout << "dx: " << eqs.dx(data.end()[-1]) << endl;
-		cout << "du: " << eqs.du(data.end()[-1]) << endl;
-		cout << "dw: " << eqs.dw(data.end()[-1]) << endl;
-	};
+	//if (exp(data.back()[1]) <= .0000001) { cout << "x too small: " << exp(data.back()[1]) << endl; };
+	//if (exp(data.back()[1]) >= xrange) { 
+	//	cout << "x too big: "; 
+	//	printState(data.end()[-1]); 
+	//	cout << "dx: " << eqs.dx(data.end()[-1]) << endl;
+	//	cout << "du: " << eqs.du(data.end()[-1]) << endl;
+	//	cout << "dw: " << eqs.dw(data.end()[-1]) << endl;
+	//};
 	return data;
 }
 
@@ -146,46 +143,61 @@ void Integrator::writeToFile(string fileName)
 	output.close();
 }
 
-double Integrator::findZeros(double initialState[], int itermax=10000)
+double Integrator::findZeros(double initialState[], int itermax=100000)
 {
 	data.clear();
 	data.push_back(initialState);
 	int i = 0;
 	double tu = 0;
 	double tx = 0;
-	while (tx == 0 && tu == 0 && i < itermax) {
+	//cout << "finding zeros" << endl;
+	while ((tx == 0 && tu == 0) && exp(data.back()[1])<500) {
+		//cout << "r=" << exp(data.back()[1]) << endl;
 		double* step = coupledRKStep(.01, data.back());
+		/*cout << "state for f1: ";
+		printState(data.back());
+		cout << "step for f1: ";
+		printState(step);
+		cout << "current f1: " << eqs.ndf1(data.back()) << ", next f1: " << eqs.ndf1(step) << endl;*/
 		if (copysign(1., eqs.ndf1(step)) != copysign(1., eqs.ndf1(data.back()))) {
 			tu = step[0];
-			//if isinf(eqs.ndf1(data.back())) {};//check if there's an infinity cuz that means our zero isn't necessarily accurate
+			//cout << "found tu=" << tu << endl;
 		};
 		if (copysign(1., eqs.ndf2(step)) != copysign(1., eqs.ndf2(data.back()))) {
 			tx = step[0];
+			//cout << "found tx=" << tx << endl;
 		};
 		data.push_back(step);
 		i++;
 	};
-	if (i >= itermax) { 
-		cout << "Exceeded max iteration count in findZeros" << endl; 
-		for (int j = 0; j < 4; j++) {
+	if (tx==0 && tu==0) { 
+		cout << "Exceeded max integration length in findZeros" << endl; 
+		/*for (int j = 0; j < 4; j++) {
 			cout << initialState[j] << endl;
-		}
+		}*/
 	}
+	//cout << "tx: " << tx << ", tu: " << tu << ", tu-tx=" << tu - tx << endl;
 	return tu - tx;
 }
 
-double Integrator::findV0(double maxprecision = 1E-5, int itermax = 10000) 
+double Integrator::findV0(double maxprecision = 1E-8, int itermax = 10000) 
 {
-	double v0 = 1E-100;
-	double dv = .5;
+	double v0 = .9;
+	double dv = -.4;
 	double testState[4] = { 0,0,0,0 };
 	int i = 0;
-	while (dv > maxprecision&& i < itermax) {
-		while (copysign(1, findZeros(new double[4] { 0,0,log(v0 + dv),0 }))!= copysign(1, findZeros(new double[4]{ 0,0,log(v0),0 }))) {
+	//cout << "Finding v0" << endl;
+	while (abs(dv) > maxprecision&& i < itermax) {
+		
+		while ((copysign(1, findZeros(new double[4] { 0,0,log(v0 + dv),0 }))!= copysign(1, findZeros(new double[4]{ 0,0,log(v0),0 }))) or (v0+dv>1) or (v0+dv<0)) {
+			//cout << "v0: " << v0 << ", dv: " << dv << endl;
 			dv = dv / 2;
 		};
 		v0 = v0 + dv;
+		//cout << "v0: " << v0 << ", dv: " << dv << endl;
+		//cout << "tu-tx = " << findZeros(new double[4]{ 0, 0, log(v0), 0 }) << endl;
 		i++;
+		
 	};
 	if (i >= itermax) { cout << "Max iteration count exceeded in findV0" << endl; };
 	return v0 + dv;
@@ -205,8 +217,9 @@ void Integrator::scan(string fileName, double lower = .001, double upper = .01, 
 		}
 		d.clear();
 	}
-	cout << "Making data for v=" << findV0() << endl;
-	vector<double*> d = generateFunction(new double[4]{ 0,0,log(findV0()),0 }, 50.);
+	double v0 = findV0();
+	cout << "Making data for v=" << v0 << endl;
+	vector<double*> d = generateFunction(new double[4]{ 0,0,log(v0),0 }, 50.);
 	for (int i = 0; i < d.size(); i++) {
 		for (int j = 0; j < 4; j++) {
 			output << d[i][j] << " ";
