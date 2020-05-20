@@ -41,7 +41,7 @@ double Equations::ndf1(double state[])
 
 double Equations::ndf2(double state[])
 {
-	double f2 = a * exp(-state[1] - state[3]) - 2.;
+	double f2 = a * exp(-state[1] - state[3]) - 2. + (gamma-1)*b*exp(-state[1]-state[2]-state[3])*(1-betap*exp(2*state[1]+lambda*state[3]))/gamma;
 	if (isinf(f2)) { f2 = copysign(numeric_limits<double>::max(), f2); };
 	return f2;
 };

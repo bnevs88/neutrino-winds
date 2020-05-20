@@ -8,7 +8,7 @@
 using namespace std;
 
 int main() {
-	Equations eqs(1.01,10,200,2);
+	Equations eqs(1.1,10,200,1);
 	//cout << "Compiled equations" << endl;
 	//Equations eqs;
 	Integrator In(eqs);
@@ -44,6 +44,7 @@ int main() {
 	//cout << In.findZeros(new double[4]{ 0,0,log(.0003755),0 }) << endl;
 	//cout << "scanning" << endl;
 	In.scan("./gammahc.txt",v0/2.,2*v0,10,.89);
+	//In.scan("./gammahc.txt", .00001, .0001, 10, .89);
 	return 0;
 }
 

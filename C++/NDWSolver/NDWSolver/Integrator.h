@@ -117,9 +117,10 @@ vector<double*> Integrator::generateFunction(double initialState[], double xrang
 	data.push_back(initialState);
 	int i = 0;//iterator
 	//cout << "generating function" << endl;
-	while (exp(data.back()[1]) > .0000001 && exp(data.back()[1]) < xrange && i < itermax) {
+	double* step = initialState;
+	while (exp(step[1]) > .0000001 && exp(step[1]) < xrange && i < itermax) {
 		//cout << "r=" << exp(data.back()[1]) << endl;
-		double* step = coupledRKStep(.0001, data.back());
+		step = coupledRKStep(.0001, data.back());
 		data.push_back(step);
 		i++;
 	}
