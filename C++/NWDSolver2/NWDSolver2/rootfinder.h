@@ -9,7 +9,7 @@ template <class FUNCTION>
 double Find1DRoot(double xlo, double xup, FUNCTION func, double tol = 1.e-8,
     bool verbose = false) {
     double fup = func(xup);
-    double flo =0./*= func(xlo)*/;
+    double flo = 0;// = func(xlo);
     double xmid, fmid;
     if (verbose) std::cout << fup << " " << flo << std::endl;
     int iter = 0;

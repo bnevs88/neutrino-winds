@@ -11,7 +11,7 @@
 
 class Integrator {
 public:
-	Integrator(EoS* eq, bool integrate = true) : eqs(eq) { if (integrate) { generateFunction(.001, 100.); }; };
+	Integrator(EoS* eq, bool verbose = false, bool integrate = true) : eqs(eq), verbose(verbose) { if (integrate) { generateFunction(.001, 100.); }; };
 	void writeToFile(std::ofstream* output);
 	void generateFunction(double dt, double tmax);
 	std::vector<double> getDataLast() { return data.back(); };
@@ -24,7 +24,7 @@ protected:
 	void printState(std::vector<double> state);
 	std::vector<std::vector<double>> data;
 	std::vector<double> tvec;
-
+	bool verbose;
 };
 
 void Integrator::writeToFile(std::ofstream* output)
@@ -63,25 +63,33 @@ void Integrator::generateFunction(double dt0 = .001, double tmax = 100.) {
 	while (eqs->stopCondition(state) > 0.0 && t < tmax) {
 		std::vector<double> step = RK4Step(t, dt, state);
 		double deltaMax = 0.;
-		for (int i = 1; i < state.size(); i++) {
+		for (int i = 0; i < state.size(); i++) {
 			deltaMax = std::max(deltaMax, fabs(step[i]) / std::max(1., fabs(state[i])));
 		};
-		//std::cout << "dt=" << dt << ", deltaMax=" << deltaMax << std::endl;
-		if (deltaMax < 1.e-3) {
+		
+		if (deltaMax < 1.e-2) {
 			//std::cout << "took step" << std::endl;
 			stateLast = state;
 			if (t>=tout) {
 				data.push_back(state);
 				tvec.push_back(t);
-				//printState(state);
 				tout += dtout;
+			}
+			if (verbose) {
+				std::cout << "dt=" << dt << ", deltaMax=" << deltaMax << std::endl;
+				std::cout << "State: ";
+				printState(state);
+				std::cout << "Step: ";
+				printState(step);
+				
 			}
 			t += dt;
 			it += 1;
 			for (int i = 0; i < state.size(); ++i) {
 				state[i] += step[i];
 			}
-			if (deltaMax < 1.e-4) { dt = dt * 1.5; };
+			if (verbose) std::cout << "StopCondition after step: " << eqs->stopCondition(state) << std::endl;
+			if (deltaMax < 1.e-3) { dt = dt * 1.5; if (verbose) std::cout << "Step too small" << std::endl; };
 		}
 		else {
 			dt = dt / 2.;
